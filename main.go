@@ -47,7 +47,8 @@ func query(ctx context.Context, client *bigquery.Client) (*bigquery.RowIterator,
 	from 
 	` + "`ttm-aersight-b4c15e1f.aersight_acp_ds.ipstream_flows`" + `
 	WHERE 
-		eventdate > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 24 HOUR)
+		eventdate >= TIMESTAMP(DATE_SUB(CURRENT_DATE(), interval 1 day))
+    	and eventdate < timestamp(CURRENT_DATE())
 	GROUP BY 
 		device_id, destination_ip;`)
 	return query.Read(ctx)
